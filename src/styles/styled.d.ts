@@ -5,6 +5,7 @@ declare module "styled-components" {
   export interface DefaultTheme {
     name: "light" | "dark";
     colors: {
+      surfaceHover: string;
       bg: string;
       surface: string;
       border: string;

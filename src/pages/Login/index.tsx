@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { api } from "../../services/api/api";
 
 const LoginSchema = z.object({
   email: z.string().email("Informe um e-mail válido"),
@@ -40,15 +41,19 @@ export default function Login() {
 
     try {
       setLoading(true);
-      // 🔐 TODO: trocar por chamada real à sua API
-      await new Promise((r) => setTimeout(r, 900));
+      const data = await api("/login", {
+        method: "POST",
+        body: JSON.stringify({ email: form.email, password: form.password }),
+     });
 
-      // Exemplo de persistência simplificada (troque por token real)
-      if (form.remember) localStorage.setItem("auth-demo", JSON.stringify({ email: form.email, ts: Date.now() }));
-
+        // se o backend retorna um token:
+        if (form.remember && data.token) {
+        localStorage.setItem("auth-demo", JSON.stringify({ token: data.token, ts: Date.now() }));
+        }
       nav("/", { replace: true });
     } catch (err: unknown) {
       if (err instanceof Error) {
+        console.log("🚀 ~ handleSubmit ~ err:", err)
         setServerError(err.message);
       } else {
         setServerError("Não foi possível entrar. Tente novamente.");
@@ -135,6 +140,11 @@ export default function Login() {
               "Entrar"
             )}
           </SubmitBtn>
+
+          <AltBtn type="button" onClick={() => nav("/register")}>
+            Criar nova conta
+          </AltBtn>
+
         </Form>
 
         <Footer>
@@ -254,4 +264,21 @@ const Footer = styled.footer`
 `;
 const Small = styled.small`
   color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+
+const AltBtn = styled.button`
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: transparent;
+  color: ${({ theme }) => theme.colors.text};
+  width: 100%;
+  border-radius: ${({ theme }) => theme.radius.md};
+  padding: 12px 14px;
+  font-weight: 600;
+  margin-top: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.surfaceHover || "#f5f5f5"};
+  }
 `;
