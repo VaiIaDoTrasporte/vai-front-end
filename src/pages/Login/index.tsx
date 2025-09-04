@@ -10,9 +10,15 @@ const LoginSchema = z.object({
   remember: z.boolean().optional(),
 });
 
+interface LoginForm {
+  email: string;
+  password: string;
+  remember: boolean;
+}
+
 export default function Login() {
   const nav = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "", remember: true });
+  const [form, setForm] = useState<LoginForm>({ email: "", password: "", remember: true });
   const [showPwd, setShowPwd] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof typeof form, string>>>({});
   const [serverError, setServerError] = useState<string | null>(null);
@@ -27,12 +33,8 @@ export default function Login() {
 
     const parsed = LoginSchema.safeParse({ ...form });
     if (!parsed.success) {
-      const fieldErrors: any = {};
-      parsed.error.errors.forEach((err) => {
-        const path = (err.path?.[0] as string) || "";
-        fieldErrors[path] = err.message;
-      });
-      setErrors(fieldErrors);
+      console.log("🚀 ~ handleSubmit ~ parsed:", parsed)
+      setErrors(parsed.error.flatten().fieldErrors as Partial<Record<keyof LoginForm, string>>);
       return;
     }
 
@@ -45,8 +47,12 @@ export default function Login() {
       if (form.remember) localStorage.setItem("auth-demo", JSON.stringify({ email: form.email, ts: Date.now() }));
 
       nav("/", { replace: true });
-    } catch (err: any) {
-      setServerError(err?.message || "Não foi possível entrar. Tente novamente.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setServerError(err.message);
+      } else {
+        setServerError("Não foi possível entrar. Tente novamente.");
+      }
     } finally {
       setLoading(false);
     }
