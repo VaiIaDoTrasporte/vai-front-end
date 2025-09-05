@@ -108,8 +108,17 @@ export default function Register() {
       });
       console.log("🚀 ~ handleSubmit ~ data:", data)
 
-      // se o backend retornar token, usuário, etc., você pode salvar aqui
-      localStorage.setItem("auth-demo", JSON.stringify({ token: data.token, ts: Date.now() }));
+      // Salva token e usuário (mesmo padrão do login)
+      localStorage.setItem(
+        "auth-demo",
+        JSON.stringify({
+          token: data.token,
+          usuario: data.usuario
+            ? { ...data.usuario, nome: data.usuario.nome ?? data.usuario.nomeCompleto ?? data.usuario.name }
+            : null,
+          ts: Date.now(),
+        })
+      );
       // redireciona para home
       nav("/", { replace: true });
     } catch (err: unknown) {
