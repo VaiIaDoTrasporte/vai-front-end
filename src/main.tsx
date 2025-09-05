@@ -14,7 +14,7 @@ const qc = new QueryClient();
 function AppThemeProvider({ children }: { children: React.ReactNode }) {
   const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
   return (
-    <ThemeProvider theme={prefersDark ? darkTheme : lightTheme}>
+    <ThemeProvider theme={prefersDark ?  lightTheme : darkTheme}>
       {children}
     </ThemeProvider>
   );

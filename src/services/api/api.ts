@@ -1,10 +1,17 @@
 // src/services/api/api.ts
 import { API_URL } from "./config";
+import { getToken } from "../auth/auth";
 
 export async function api(path: string, options?: RequestInit) {
+  const token = getToken();
+  const isForm = typeof FormData !== "undefined" && options?.body instanceof FormData;
+  const defaultHeaders: Record<string, string> = {};
+  if (!isForm) defaultHeaders["Content-Type"] = "application/json";
+  if (token) defaultHeaders["Authorization"] = `Bearer ${token}`;
+
   const res = await fetch(`${API_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
     ...options,
+    headers: { ...defaultHeaders, ...(options?.headers as Record<string, string> | undefined) },
   });
 
   if (!res.ok) {

@@ -7,6 +7,7 @@ const base = {
   shadow: {
     sm: "0 1px 2px rgba(0,0,0,0.06)",
     md: "0 8px 24px rgba(0,0,0,0.08)",
+    lg: "0 16px 48px rgba(0,0,0,0.10)",
   },
 };
 
@@ -22,6 +23,7 @@ export const lightTheme: DefaultTheme = {
     primaryText: "#FFFFFF",
     userBubbleBg: "#FD4E06",
     assistantBubbleBg: "#F1F2F6",
+    surfaceHover: ""
   },
   ...base,
 };
@@ -38,6 +40,7 @@ export const darkTheme: DefaultTheme = {
     primaryText: "#FFFFFF",
     userBubbleBg: "#FD4E06",
     assistantBubbleBg: "#1C2030",
+    surfaceHover: ""
   },
   ...base,
 };

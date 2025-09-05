@@ -90,6 +90,8 @@ export default function Register() {
     }
 
     try {
+        const doc = onlyDigits(form.document);
+        console.log("🚀 ~ handleSubmit ~ doc:", doc.length)
       setLoading(true);
      const payload = {
        nome: form.name.trim(),
@@ -97,7 +99,7 @@ export default function Register() {
        celular: onlyDigits(form.phone),   // celular
        senha: form.password,              // senha
        empresa: form.company.trim(),      // empresa
-       cpf: onlyDigits(form.document),    // cpf
+       ...(doc.length === 11 ? { cpf: doc } : { cnpj: doc }), // cpf ou cnpj
      };
 
       const data = await api("/users", {
@@ -108,8 +110,8 @@ export default function Register() {
 
       // se o backend retornar token, usuário, etc., você pode salvar aqui
       localStorage.setItem("auth-demo", JSON.stringify({ token: data.token, ts: Date.now() }));
-      // redireciona para login
-      nav("/login", { replace: true });
+      // redireciona para home
+      nav("/", { replace: true });
     } catch (err: unknown) {
       if (err instanceof Error) setServerError(err.message);
       else setServerError("Não foi possível concluir o cadastro. Tente novamente.");
@@ -122,13 +124,7 @@ export default function Register() {
     <Viewport>
       <Card>
         <Header>
-          <BrandIcon aria-hidden>
-            <span>🚚</span>
-          </BrandIcon>
-          <div>
-            <Title>IA para Transportes</Title>
-            <Subtitle>Crie sua conta</Subtitle>
-          </div>
+              <img src="/images/logo.png" alt="Vai Logística" style={{ width: 280, height: 200 }} />
         </Header>
 
         <Form onSubmit={handleSubmit} noValidate>
@@ -274,7 +270,8 @@ const Viewport = styled.main`
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  background: ${({ theme }) => theme.colors.bg};
+  /* background: ${({ theme }) => theme.colors.bg}; */
+  background: url("/images/bg-truck.png") center/cover no-repeat;
   padding: 24px;
 `;
 const Card = styled.section`
@@ -287,20 +284,7 @@ const Card = styled.section`
   padding: 24px;
 `;
 const Header = styled.header`
-  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
-`;
-const BrandIcon = styled.div`
-  width: 40px; height: 40px; border-radius: 10px;
-  display: grid; place-items: center;
-  background: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.primaryText};
-  font-size: 20px;
-`;
-const Title = styled.h1`
-  margin: 0; font-size: 18px; font-weight: 700; line-height: 1.2;
-`;
-const Subtitle = styled.p`
-  margin: 2px 0 0; color: ${({ theme }) => theme.colors.textMuted}; font-size: 14px;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px; justify-content: center;
 `;
 const Form = styled.form`
   display: grid; gap: 14px; margin-top: 10px;

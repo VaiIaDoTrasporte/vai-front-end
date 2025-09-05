@@ -17,6 +17,8 @@ declare module "styled-components" {
       assistantBubbleBg: string;
     };
     radius: { md: string; lg: string; xl: string };
-    shadow: { sm: string; md: string };
+    shadow: {
+        lg: string; sm: string; md: string 
+};
   }
 }
