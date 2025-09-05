@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { z } from "zod";
@@ -169,7 +170,7 @@ export default function ProfileEdit() {
                   onChange={(e) => setForm((s) => ({ ...s, nome: e.target.value }))}
                   aria-invalid={!!errors.nome}
                 />
-                {errors.nome && <ErrorText>{errors.nome}</ErrorText>}
+                {errors.nome && <p>{errors.nome}</p>}
               </FormGroup>
 
               <FormGroup>
@@ -195,10 +196,8 @@ export default function ProfileEdit() {
                 <AvatarRow>
                   <Avatar>
                     {preview ? (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img src={preview} alt="Pré-visualização" />
                     ) : stored?.avatarUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img src={stored.avatarUrl} alt="Foto de perfil" />
                     ) : (
                       <span>

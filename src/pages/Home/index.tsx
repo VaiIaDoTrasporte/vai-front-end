@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -304,7 +305,6 @@ export default function Home() {
           <UserCard onClick={() => setUserMenuOpen((v) => !v)} aria-label="Abrir menu do usuário">
             <Avatar>
               {user?.avatarUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
                 <img src={user.avatarUrl} alt={user?.name || "Usuário"} />
               ) : (
                 <span>{getInitials(user?.name || user?.email || "U")}</span>
